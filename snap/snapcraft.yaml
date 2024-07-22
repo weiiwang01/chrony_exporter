@@ -1,0 +1,39 @@
+name: weii-wang-charmed-chrony-exporter
+base: core24
+version: "0.10.1"
+summary: chrony_exporter used in the chrony charm.
+description: >-
+  chrony_exporter used in the chrony charm (https://charmhub.io/chrony).
+
+platforms:
+  amd64:
+    build-on: [ amd64 ]
+    build-for: [ amd64 ]
+
+grade: stable
+confinement: strict
+license: Apache-2.0
+
+system-usernames:
+  snap_daemon: shared
+
+apps:
+  chrony-exporter:
+    command: >-
+      bin/chrony_exporter 
+      --chrony.address localhost:323
+      --collector.tracking
+      --collector.sources
+      --collector.serverstats
+      --web.listen-address 127.0.0.1:9123
+    daemon: simple
+    plugs:
+      - network
+      - network-bind
+
+parts:
+  chrony_exporter:
+    build-snaps:
+      - go
+    plugin: go
+    source: .
